@@ -14,8 +14,13 @@ Nanobus.prototype.use = function (fn) {
 }
 
 Nanobus.prototype.from = function (ctx, cb) {
-  var stack = new Array(this._middleware.length)
+  var length = this._middleware.length
+  var stack = new Array(length)
   var index = 0
+
+  assert.notEqual(length, 0, 'nanobus.from: there should be at least one middleware registered')
+  assert.equal(typeof ctx, 'object', 'nanobus.from: ctx should be type object')
+  assert.equal(typeof cb, 'function', 'nanobus.from: cb should be type function')
 
   if (cb) stack.push(cb)
   this._call(index, ctx, stack)
