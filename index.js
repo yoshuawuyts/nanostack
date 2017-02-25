@@ -27,38 +27,40 @@ Nanobus.prototype.from = function (fn) {
     stack.push(self._done)
     if (cb) stack.push(cb)
 
-    call(index, ctx, stack)
+    self._call(index, ctx, stack)
   })
+}
 
-  function call (index, ctx, stack) {
-    var middleware = self._middleware[index]
+Nanobus.prototype._call = function (index, ctx, stack) {
+  var middleware = this._middleware[index]
+  var self = this
 
-    middleware(ctx, function (err, val, cb) {
-      if (!cb && typeof val === 'function') {
-        cb = val
-        val = null
-      }
+  middleware(ctx, function (err, val, cb) {
+    if (!cb && typeof val === 'function') {
+      cb = val
+      val = null
+    }
 
-      // Unwind the stack if next() isn't called
-      if (err) return unwindStack(stack, err)
-      if (!cb) return unwindStack(stack, null, val)
-      stack.push(cb)
+    // Unwind the stack if next() isn't called
+    if (err) return self._unwindStack(stack, err)
+    if (!cb) return self._unwindStack(stack, null, val)
+    stack.push(cb)
 
-      // Continue to next part of the stack
-      index += 1
-      assert.notEqual(index, self._middleware.length, 'nanobus.from(): no next middleware available')
-      call(index, ctx, stack)
-    })
-  }
+    // Continue to next part of the stack
+    index += 1
+    assert.notEqual(index, self._middleware.length, 'nanobus.from(): no next middleware available')
+    self._call(index, ctx, stack)
+  })
+}
 
-  function unwindStack (stack, err, val) {
-    var fn = stack.pop()
-    if (!fn) return
+Nanobus.prototype._unwindStack = function (stack, err, val) {
+  var fn = stack.pop()
+  var self = this
+  if (!fn) return
 
-    fn(err, val, function (err, val) {
-      unwindStack(stack, err, val)
-    })
-  }
+  fn(err, val, function (err, val) {
+    self._unwindStack(stack, err, val)
+  })
 }
 
 Nanobus.prototype._done = function (err) {
