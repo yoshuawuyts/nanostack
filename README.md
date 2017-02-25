@@ -3,14 +3,14 @@
 [![downloads][8]][9] [![js-standard-style][10]][11]
 
 Bitesize middleware stack library. Analogous to [co][co] but without relying on
-newer language features.
+fancy language features.
 
 ## Usage
 ```js
 var nanostack = require('nanostack')
 var stack = nanostack()
 
-stack.push(function logger (ctx, next) {
+stack.push(function timeElapsed (ctx, next) {
   var start = Date.now()
 
   next(null, function (err, ctx, next) {
@@ -23,24 +23,56 @@ stack.push(function logger (ctx, next) {
 })
 
 var ctx = {}
-stack.from(ctx, function (err, data, next) {
+stack.walk(ctx, function (err, data, next) {
   if (err) throw err
 })
 ```
+
+## How does this work?
+A stack is a "last-in, first-out" type structure. The last thing that's added
+is also the first thing that's taken off when you "unwind the stack".
+
+In `nanostack` we push middleware onto the stack. This means that middleware is
+first executed _upwards_ (e.g. next function in sequence) until `next()` is
+called without a callback. When that happens the stack starts to unwind, and
+middleware is executed _downwards_. You can think of the execution order like
+this:
+
+```txt
+  Nanostack
+1.          7.  Middleware 1
+==============
+2.          6.  Middleware 2
+==============
+3.          5.  Middleware 3
+==============
+      4.        Middleware 4
+```
+```txt
+Sequence: middleware 1, middleware 2, middleware 3
+          middleware 4, middleware 3, middleware 2
+          middleware 1
+```
+A keydme thing to note here is that any part of middleware can cause the stack to
+unwind. This is done by not passing a callback into the `next()` function. This
+is for example useful to handle create generic error handlers for the whole
+stack of middleware.
 
 ## API
 ### `stack = nanostack`
 Create a new `nanostack` instance.
 
-### `stack.push(cb([…args], next))`
+### `stack.push(cb(ctx, next))`
 Push a new handler onto the middleware stack.
 
-### `stack([…args], next)`
-Call the functions on the middleware stack.
+### `stack.walk(ctx, next)`
+Call the functions on the middleware stack. Takes an initial context object and
+a callback.
 
-### `next([…args], handler)`
-Call the next function in the stack. If `handler` is not sent (e.g. last
-argument is not a function) the stack unwinds.
+### `next([ctx], [handler])`
+Call the next function in the stack. If `handler` is not passed (e.g. last
+argument is not a function) the stack unwinds, calling all previous `handler`
+functions in reverse order (e.g. as a stack).
 
 ## FAQ
 ### Why did you write this?

@@ -19,7 +19,7 @@ tape('nanostack()', function (t) {
     })
 
     t.pass('.from(): called')
-    stack.from(ctx, function (err, data) {
+    stack.walk(ctx, function (err, data) {
       t.ifError(err, '.from(): next no err')
       t.equal(data, 'hi', '.from(): next data received')
     })
@@ -65,7 +65,7 @@ tape('nanostack()', function (t) {
     })
 
     t.equal(order++, 0, 'order is 0')
-    stack.from(ctx, function (err, data) {
+    stack.walk(ctx, function (err, data) {
       t.ifError(err, '.from(): next no err')
       t.equal(order++, 8, 'order is 8')
     })
@@ -86,7 +86,7 @@ tape('nanostack()', function (t) {
       next()
     })
 
-    stack.from(ctx, function (err, data) {
+    stack.walk(ctx, function (err, data) {
       t.ifError(err, 'no error')
       t.equal(data, 'hi')
       t.pass('resolved')
@@ -110,7 +110,7 @@ tape('nanostack()', function (t) {
       next(err)
     })
 
-    stack.from(ctx, function (err, data) {
+    stack.walk(ctx, function (err, data) {
       t.ok(err, 'err found')
     })
   })
@@ -136,7 +136,7 @@ tape('nanostack()', function (t) {
       next()
     })
 
-    stack.from(ctx, function (err, data) {
+    stack.walk(ctx, function (err, data) {
       t.ifError(err, 'no err found')
       t.equal(ctx.foo, 'bar', 'bar found')
       t.equal(ctx.beep, 'boop', 'boop found')
