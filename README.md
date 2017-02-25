@@ -69,7 +69,7 @@ Push a new handler onto the middleware stack.
 Call the functions on the middleware stack. Takes an initial context object and
 a callback.
 
-### `next([ctx], [handler])`
+### `next([err], [value], [handler])`
 Call the next function in the stack. If `handler` is not passed (e.g. last
 argument is not a function) the stack unwinds, calling all previous `handler`
 functions in reverse order (e.g. as a stack).
