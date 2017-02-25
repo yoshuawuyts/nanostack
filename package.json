@@ -1,7 +1,7 @@
 {
-  "name": "nanobus",
-  "description": "Small message bus library",
-  "repository": "yoshuawuyts/nanobus",
+  "name": "nanostack",
+  "description": "Small middleware stack library",
+  "repository": "yoshuawuyts/nanostack",
   "version": "1.0.0",
   "scripts": {
     "deps": "dependency-check . && dependency-check . --extra --no-dev",

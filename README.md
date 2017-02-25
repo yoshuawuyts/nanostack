@@ -2,8 +2,8 @@
 [![npm version][2]][3] [![build status][4]][5] [![test coverage][6]][7]
 [![downloads][8]][9] [![js-standard-style][10]][11]
 
-Bitesize middleware stack library. Analogous to [co][co] but without relying on
-fancy language features.
+Small middleware stack library. Analogous to [co][co] but without relying on
+fancy language features. Weighs `~0.4kb` gzipped.
 
 ## Usage
 ```js
