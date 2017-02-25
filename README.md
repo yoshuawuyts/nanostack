@@ -4,6 +4,32 @@
 
 Small message bus library
 
+## Usage
+```js
+var nanobus = require('nanobus')
+
+var state = {}
+var bus = nanobus()
+
+bus.use(function logger (ctx, next) {
+  var start = Date.now()
+  next(null, function (err, ctx, next) {
+    var now = Date.now()
+    var elapsed = start - now
+    console.log('time elapsed: ' + elapsed + 'ms')
+    if (err) return next(err)
+  })
+})
+
+bus.from(function (next) {
+  var ctx = {}
+  ctx.data = { hello: 'world' }
+  next(null, ctx, function (err, data) {
+    if (err) throw err
+  })
+})
+```
+
 ## License
 [MIT](https://tldrlegal.com/license/mit-license)
 
