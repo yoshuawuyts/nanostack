@@ -13,7 +13,7 @@ Nanobus.prototype.use = function (fn) {
   return this
 }
 
-Nanobus.prototype.from = function (ctx, cb) {
+Nanobus.prototype.walk = function (ctx, cb) {
   var length = this._middleware.length
   var stack = new Array(length)
   var index = 0
