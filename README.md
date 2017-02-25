@@ -23,7 +23,7 @@ stack.push(function logger (ctx, next) {
 })
 
 var ctx = {}
-stack(ctx, function (err, data, next) {
+stack.from(ctx, function (err, data, next) {
   if (err) throw err
 })
 ```
