@@ -2,7 +2,7 @@
   "name": "nanostack",
   "description": "Small middleware stack library",
   "repository": "yoshuawuyts/nanostack",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "scripts": {
     "deps": "dependency-check . && dependency-check . --extra --no-dev",
     "start": "node .",
