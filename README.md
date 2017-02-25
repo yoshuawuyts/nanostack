@@ -53,7 +53,7 @@ Sequence: middleware 1, middleware 2, middleware 3
           middleware 4, middleware 3, middleware 2
           middleware 1
 ```
-A keydme thing to note here is that any part of middleware can cause the stack to
+A keyd thing to note here is that any part of middleware can cause the stack to
 unwind. This is done by not passing a callback into the `next()` function. This
 is for example useful to handle create generic error handlers for the whole
 stack of middleware.
