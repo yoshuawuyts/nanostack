@@ -5,7 +5,7 @@ tape('nanostack()', function (t) {
   t.test('should assert input statements', function (t) {
     t.plan(1)
     var stack = nanostack()
-    t.throws(stack.use.bind(stack), '.use(): throws')
+    t.throws(stack.push.bind(stack), '.push(): throws')
   })
 
   t.test('should call middleware', function (t) {
@@ -13,8 +13,8 @@ tape('nanostack()', function (t) {
     var stack = nanostack()
     var ctx = {}
 
-    stack.use(function (_ctx, next) {
-      t.equal(_ctx, ctx, '.use(): ctx was same')
+    stack.push(function (_ctx, next) {
+      t.equal(_ctx, ctx, '.push(): ctx was same')
       next(null, 'hi')
     })
 
@@ -32,34 +32,34 @@ tape('nanostack()', function (t) {
     var stack = nanostack()
     var ctx = {}
 
-    stack.use(function (ctx, next) {
+    stack.push(function (ctx, next) {
       t.equal(order++, 1, 'order is 1')
       next(null, function (err, val, next) {
-        t.ifError(err, '.use(): next no err')
+        t.ifError(err, '.push(): next no err')
         t.equal(order++, 7, 'order is 7')
         next()
       })
     })
 
-    stack.use(function (ctx, next) {
+    stack.push(function (ctx, next) {
       t.equal(order++, 2, 'order is 2')
       next(null, function (err, val, next) {
-        t.ifError(err, '.use(): next no err')
+        t.ifError(err, '.push(): next no err')
         t.equal(order++, 6, 'order is 6')
         next()
       })
     })
 
-    stack.use(function (ctx, next) {
+    stack.push(function (ctx, next) {
       t.equal(order++, 3, 'order is 3')
       next(null, function (err, val, next) {
-        t.ifError(err, '.use(): next no err')
+        t.ifError(err, '.push(): next no err')
         t.equal(order++, 5, 'order is 5')
         next()
       })
     })
 
-    stack.use(function (ctx, next) {
+    stack.push(function (ctx, next) {
       t.equal(order++, 4, 'order is 4')
       next()
     })
@@ -76,12 +76,12 @@ tape('nanostack()', function (t) {
     var stack = nanostack()
     var ctx = {}
 
-    stack.use(function (ctx, next) {
-      t.pass('.use() was called')
+    stack.push(function (ctx, next) {
+      t.pass('.push() was called')
       next(null, 'hi')
     })
 
-    stack.use(function (ctx, next) {
+    stack.push(function (ctx, next) {
       t.fail('should not be called')
       next()
     })
@@ -98,14 +98,14 @@ tape('nanostack()', function (t) {
     var stack = nanostack()
     var ctx = {}
 
-    stack.use(function (ctx, next) {
+    stack.push(function (ctx, next) {
       next(null, function (err, val, next) {
         t.ok(err, 'err found')
         next(err)
       })
     })
 
-    stack.use(function (ctx, next) {
+    stack.push(function (ctx, next) {
       var err = new Error('mate')
       next(err)
     })
@@ -121,7 +121,7 @@ tape('nanostack()', function (t) {
     var ctx = {}
 
     ctx.foo = 'bar'
-    stack.use(function (ctx, next) {
+    stack.push(function (ctx, next) {
       t.equal(ctx.foo, 'bar')
       next(null, function (err, val, next) {
         t.ifError(err, 'no err found')
@@ -130,7 +130,7 @@ tape('nanostack()', function (t) {
       })
     })
 
-    stack.use(function (ctx, next) {
+    stack.push(function (ctx, next) {
       t.equal(ctx.foo, 'bar')
       ctx.beep = 'boop'
       next()

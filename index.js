@@ -1,19 +1,19 @@
 var assert = require('assert')
 
-module.exports = Nanobus
+module.exports = Nanostack
 
-function Nanobus () {
-  if (!(this instanceof Nanobus)) return new Nanobus()
+function Nanostack () {
+  if (!(this instanceof Nanostack)) return new Nanostack()
   this._middleware = []
 }
 
-Nanobus.prototype.use = function (fn) {
-  assert.equal(typeof fn, 'function', 'nanostack.use: fn should be type function')
+Nanostack.prototype.push = function (fn) {
+  assert.equal(typeof fn, 'function', 'nanostack.push: fn should be type function')
   this._middleware.push(fn)
   return this
 }
 
-Nanobus.prototype.walk = function (ctx, cb) {
+Nanostack.prototype.walk = function (ctx, cb) {
   var length = this._middleware.length
   var stack = new Array(length)
   var index = 0
@@ -26,7 +26,7 @@ Nanobus.prototype.walk = function (ctx, cb) {
   this._call(index, ctx, stack)
 }
 
-Nanobus.prototype._call = function (index, ctx, stack) {
+Nanostack.prototype._call = function (index, ctx, stack) {
   var middleware = this._middleware[index]
   var self = this
 
@@ -49,7 +49,7 @@ Nanobus.prototype._call = function (index, ctx, stack) {
   })
 }
 
-Nanobus.prototype._unwindStack = function (stack, err, val) {
+Nanostack.prototype._unwindStack = function (stack, err, val) {
   var self = this
 
   var fn = stack.pop()
