@@ -10,7 +10,7 @@ fancy language features. Weighs `~0.4kb` gzipped.
 var nanostack = require('nanostack')
 var stack = nanostack()
 
-stack.push(function timeElapsed (ctx, next) {
+stack.use(function timeElapsed (ctx, next) {
   var start = Date.now()
 
   next(null, function (err, ctx, next) {
@@ -62,7 +62,7 @@ stack of middleware.
 ### `stack = nanostack`
 Create a new `nanostack` instance.
 
-### `stack.push(cb(ctx, next))`
+### `stack.use(cb(ctx, next))`
 Push a new handler onto the middleware stack.
 
 ### `stack.walk(ctx, next)`
