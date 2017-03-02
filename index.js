@@ -41,7 +41,7 @@ Nanostack.prototype._call = function (index, ctx, stack) {
 
     // Unwind the stack if there's no next()
     stack.push(cb)
-    if (++index === self._middleware.length) self._unwindStack(stack)
+    if (++index === self._middleware.length) return self._unwindStack(stack)
 
     // Continue to next part of the stack
     self._call(index, ctx, stack)
